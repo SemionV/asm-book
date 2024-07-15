@@ -17,6 +17,7 @@ main:
     mov     bl, [number2]
     cmp     rax, rbx
     jge     greater
+
 lesser:
     mov     rdi, lesserString
     mov     rax, 0
