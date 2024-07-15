@@ -11,4 +11,5 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(AddExercise)
 
 AddExercise(ex-hello-world hello-world/hello.asm)
-AddExercise(ex-jump jump/jump.asm)
+AddExercise(ex-jump chapter07/jump.asm)
+AddExercise(ex-loop chapter07/loop.asm)
