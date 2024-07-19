@@ -1,5 +1,6 @@
 macro(AddExercise name sources)
     set(EX_TARGET ${name})
+    message("${sources}")
     add_executable(${EX_TARGET} ${sources})
     target_compile_options(${EX_TARGET} PRIVATE -f elf64 -l ${EX_TARGET}.lst)
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
