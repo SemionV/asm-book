@@ -4,6 +4,10 @@ set(CMAKE_ASM_NASM_LINK_EXECUTABLE "gcc <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK
 set(CMAKE_ASM_NASM_OBJECT_FORMAT elf64)
 project(nasm-book LANGUAGES ASM_NASM)
 
+add_compile_options(-g)
+
+add_subdirectory(common-lib)
+
 enable_language(ASM_NASM)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
@@ -20,4 +24,4 @@ AddExercise(ex-fcalc chapter11/fcalc.asm)
 AddExercise(ex-func5 chapter15/function5.asm)
 AddExercise(ex-bitops "chapter16/bitops.asm;chapter16/printb.asm")
 AddExercise(ex-read-console chapter19/read-console.asm)
-AddExercise(ex-file-io chapter20/file.asm)
+AddExercise(ex-file-io chapter20/file.asm common-lib)

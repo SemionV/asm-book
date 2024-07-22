@@ -1,9 +1,40 @@
-;printp.asm
-section .data
-section .bss
-section .text
-    global printb
-printb:
+global printString
+printString:
+    push    rbp
+    mov     rbp, rsp
+        ;save registers
+        push    r12
+        and     rsp, 0xfffffffffffffff0
+
+        ;calculate lenth of the input string
+        xor     rdx, rdx
+        mov     r12, rdi
+        .loop_length_count:
+        cmp     byte[r12], 0
+        je      .length_calculated
+        inc     r12
+        inc     rdx
+        jmp     .loop_length_count
+
+        .length_calculated:
+        cmp     rdx, 0
+        je      .done
+
+        ;output to sdt out
+        mov     rsi, rdi
+        mov     rax, 1
+        mov     rdi, 1
+        syscall
+
+        .done:
+        ;pop the saved registers
+        add     rsp, 0x8
+        pop     r12
+    leave
+    ret
+
+global printNumber64
+printNumber64:
 section .data
     .str1Bit     db "1",0
     .str0Bit     db "0",0
