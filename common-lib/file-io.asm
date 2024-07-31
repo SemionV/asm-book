@@ -51,3 +51,14 @@ writeFile:
 
     leave
     ret
+
+;params
+;rdi        FD
+global  closeFile
+closeFile:
+    push    rbp
+    mov     rbp, rsp
+    mov     rax, NR_close
+    syscall
+    leave
+    ret
