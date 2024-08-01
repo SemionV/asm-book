@@ -33,27 +33,31 @@ printString:
     leave
     ret
 
-global printNumber64
-printNumber64:
+global printBits
+printBits:
 section .data
     .str1Bit     db "1",0
     .str0Bit     db "0",0
     .strSpace    db " ",0
     .strDot      db ".",0
     .strNewline  db 10,0
+    .byteBitCount dq 8
+    .halfBitCount dq 4
 section .text
     push    rbp
     mov     rbp, rsp
 
-        xor     rcx, rcx
-        mov     rcx, 63
+    mov     r12, rdi
+    xor     rcx, rcx
+    sub     rsi,1
+    mov     rcx, rsi
 
-        .loop:
-        mov     rax, rdi
+    .loop:
+        mov     rax, r12
         shr     rax, cl
 
-        push    rdi
         push    rcx
+        and     rsp, 0xFFFFFFFFFFFFFFF0
 
         and     rax, 1
         cmp     rax, 1
@@ -70,18 +74,52 @@ section .text
         mov     rdx, 1
         syscall
 
+        add     rsp, 0x8
         pop     rcx
-        pop     rdi
 
+        push    rcx
+        and     rsp, 0xFFFFFFFFFFFFFFF0
+
+        mov     rax, rcx
+        xor     rdx, rdx
+        idiv    qword [.halfBitCount]
+        cmp     rdx, 0
+        jne     .loop_inc
+        mov     rsi, .strDot
+        mov     rax, rcx
+        xor     rdx, rdx
+        idiv    qword [.byteBitCount]
+        cmp     rdx, 0
+        jne     .loop_print_del
+        mov     rsi, .strSpace
+        cmp     rax, 0
+        je      .loop_inc
+        .loop_print_del:
+        mov     rax, 1
+        mov     rdi, 1
+        mov     rdx, 1
+        syscall
+
+        add     rsp, 0x8
+        pop     rcx
+
+        .loop_inc:
         dec     rcx
         cmp     rcx, 0
         jge     .loop
 
-        mov     rax, 1
-        mov     rdi, 1
-        mov     rsi, .strNewline
-        mov     rdx, 1
-        syscall
+    leave
+    ret
+
+global printBits64
+printNumber64:
+section .data
+section .text
+    push    rbp
+    mov     rbp, rsp
+
+    mov     rsi, 64
+    call    printBits
 
     leave
     ret

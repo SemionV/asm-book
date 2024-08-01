@@ -11,7 +11,7 @@ section .data
     NL              db      0xA,0
 
     fmtPrintFD      db      "FD: %ld",0xA,0
-    strFileError    db      "File error, ",0s
+    strFileError    db      "File error, ",0
     strFileCreated  db      "File created, ",0
     strFileWritten  db      "File written, ",0
     strFileClosed   db      "File closed, ",0
