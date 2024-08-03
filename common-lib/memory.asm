@@ -36,6 +36,7 @@ subBlock:
     mov     rbp, rsi
 
     .loop:
+    ;search for first letter of the substring
     mov     rcx, r12
     lodsb
     cld
@@ -50,6 +51,7 @@ subBlock:
     cmp     rax, r13
     jl      .not_found
 
+    ;compare substrings
     mov     r12, rax
     mov     rax, r14
     mov     rdi, r15
