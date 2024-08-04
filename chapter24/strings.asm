@@ -3,12 +3,15 @@ extern printString
 extern copyBlock
 extern initBlock
 extern subBlock
+extern compareData
 section .data
     strSubStringFmt db  "Substring position: %ld",0xA,0
+    strCmpResultFmt db  "Compare result: %ld",0xA,0
     strData         db  "Hardangervidda",0xA,0
+    strDataCmp      db  "Hardangervidha",0xA,0
     strDataLength   equ $ - strData
     NL              db  0xA,0
-    strSubString    db  "dda"
+    strSubString    db  "anger"
     subStrLength    equ $ - strSubString
 section .bss
     strDataCopy     resb    strDataLength
@@ -41,9 +44,29 @@ main:
     call    printString
 
     mov     rdi, strData
-    mov     rsi, strSubString
+    mov     rsi, strDataCopy
     mov     rdx, strDataLength
-    mov     rcx, subStrLength
+    call    compareData
+
+    mov     rdi, strCmpResultFmt
+    mov     rsi, rax
+    xor     rax, rax
+    call    printf
+
+    mov     rdi, strData
+    mov     rsi, strDataCmp
+    mov     rdx, strDataLength
+    call    compareData
+
+    mov     rdi, strCmpResultFmt
+    mov     rsi, rax
+    xor     rax, rax
+    call    printf
+
+    mov     rdi, strData
+    mov     rsi, strSubString
+    mov     rdx, subStrLength
+    mov     rcx, strDataLength
     call    subBlock
 
     mov     rdi, strSubStringFmt
@@ -53,5 +76,6 @@ main:
 
     xor     rax, rax
 
+    .return:
     leave
     ret
