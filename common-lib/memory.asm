@@ -33,7 +33,7 @@ subBlock:
     mov     r12, rdx
     mov     r13, rcx
     mov     r15, rdi
-    mov     rbp, rsi
+    mov     r8, rsi
 
     .loop:
     ;search for first letter of the substring
@@ -65,7 +65,7 @@ subBlock:
     repe    cmpsb
     je      .return
     mov     rdi, r15
-    mov     rsi, rbp
+    mov     rsi, r8
     jmp     .loop
 
     .not_found:
