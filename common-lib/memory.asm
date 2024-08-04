@@ -110,3 +110,31 @@ compareData:
     .return:
     leave
     ret
+
+;params:
+;rdi - value
+;rsi - word position
+;rdx - word
+global  setWord64
+setWord64:
+    push    rbp
+    mov     rbp, rsp
+
+    mov     rcx, rsi
+    imul    rcx, 16
+
+    mov     rax, rdi
+    shr     rax, cl
+    and     rax, 0x000000000000FFFF
+    shl     rax, cl
+    xor     rdi, rax
+
+    xor     rax, rax
+    mov     rax, rdx
+    shl     rax, cl
+    or      rdi, rax
+
+    mov     rax, rdi
+
+    leave
+    ret

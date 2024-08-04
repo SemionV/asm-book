@@ -8,4 +8,6 @@ enable_language(ASM_NASM)
 add_library(${PROJECT_NAME} STATIC
         file-io.asm
         print.asm
-        memory.asm)
+        memory.asm
+        version.asm
+        cpuid.asm)
