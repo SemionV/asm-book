@@ -12,10 +12,14 @@ getSSEVersion:
     ;test for SSE
     test    edx, 2000000h	;test bit 25 (SSE)
     jz      .sse2     		;SSE available
+    push    rcx
+    push    rdx
     mov     rdi, rax
     mov     rsi, 3
     mov     rdx, 1
-    call    setWord64
+    ;call    setWord64
+    pop     rdx
+    pop     rcx
     .sse2:
     test    edx, 4000000h   ;test bit 26 (SSE 2)
     jz      .sse3           ;SSE 2 available

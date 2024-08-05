@@ -1,7 +1,10 @@
+extern printf
 extern setSemanticVersion
 extern setWord64
 extern getSSEVersion
 section .data
+    strSSEVersion       db "SSE version: %ld.%ld",0xA,0
+    strSSENotSupported  db "SSE is not supported",0xA,0
 section .bss
 section .text
 global main
@@ -9,36 +12,28 @@ main:
     push    rbp
     mov     rbp, rsp
 
-    mov     rdi, 4
-    mov     rsi, 2
-    mov     rdx, 3
-    mov     rcx, 127
-    call    setSemanticVersion
+    call    getSSEVersion
 
-    xor     r12, r12
+    mov     rdi, strSSEVersion
+
     mov     r12, rax
     shr     r12, 48
+    mov     rsi, r12
 
-    xor     r13, r13
-    mov     r13, rax
-    shr     r13, 32
-    and     r13, 0x000000000000ffff
+    cmp     rsi, 0
+    jg      .sse_supported
+    mov     rdi, strSSENotSupported
+    .sse_supported:
+    mov     rdi, strSSEVersion
 
-    xor     r14, r14
-    mov     r14, rax
-    shr     r14, 16
-    and     r14, 0x000000000000ffff
+    mov     r12, rax
+    shr     r12, 32
+    and     r12, 0x000000000000ffff
+    mov     rdx, r12
 
-    xor     r15, r15
-    mov     r15, rax
-    and     r15, 0x000000000000ffff
+    xor     rax, rax
 
-    mov     rdi, rax
-    mov     rsi, 0
-    mov     rdx, 6
-    call    setWord64
-
-    call    getSSEVersion
+    call    printf
 
     leave
     ret

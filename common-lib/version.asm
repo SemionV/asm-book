@@ -30,4 +30,4 @@ setSemanticVersion:
     or      rax, r12
 
     leave
-    reet
+    ret
