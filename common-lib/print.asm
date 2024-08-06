@@ -1,3 +1,6 @@
+extern printf
+extern fflush
+
 global printString
 printString:
     push    rbp
@@ -120,6 +123,32 @@ section .text
 
     mov     rsi, 64
     call    printBits
+
+    leave
+    ret
+
+global printVector4f
+printVector4f:
+section .data
+    .message    db "%.3f, %.3f, %.3f, %.3f",0
+section .text
+    push        rbp
+    mov         rbp, rsp
+
+    movss       xmm0, [rdi]
+    cvtss2sd    xmm0, xmm0
+    movss       xmm1, [rdi + 4]
+    cvtss2sd    xmm1, xmm1
+    movss       xmm2, [rdi + 8]
+    cvtss2sd    xmm2, xmm2
+    movss       xmm3, [rdi + 12]
+    cvtss2sd    xmm3, xmm3
+    mov         rax, 4
+    mov         rdi, .message
+    call        printf
+
+    mov         rdi, 0
+    call        fflush
 
     leave
     ret
