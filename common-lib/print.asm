@@ -115,7 +115,7 @@ section .text
     ret
 
 global printBits64
-printNumber64:
+printBits64:
 section .data
 section .text
     push    rbp

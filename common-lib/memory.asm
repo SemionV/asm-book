@@ -115,18 +115,29 @@ compareData:
 ;rdi - value
 ;rsi - word position
 ;rdx - word
-global  setWord64
-setWord64:
+;rcx - bits count in a word
+global  packWord64
+packWord64:
     push    rbp
     mov     rbp, rsp
 
-    mov     rcx, rsi
-    imul    rcx, 16
+    mov     r12, rcx
+    mov     r13, rsi
+    imul    r13, r12
 
+    ;clear bits of the word
     mov     rax, rdi
-    shr     rax, cl
-    and     rax, 0x000000000000FFFF
+    ;clear bits to the left of the word
+    mov     rcx, 64
+    sub     rcx, r13
+    sub     rcx, r12
     shl     rax, cl
+    shr     rax, cl
+    ;clear bits to the right of the word
+    mov     rcx, r13
+    shr     rax, cl
+    shl     rax, cl
+    ;clear the bits in the word
     xor     rdi, rax
 
     xor     rax, rax
@@ -135,6 +146,21 @@ setWord64:
     or      rdi, rax
 
     mov     rax, rdi
+
+    leave
+    ret
+
+;params:
+;rdi - value
+;rsi - word position
+;rdx - word
+global  setWord64
+setWord64:
+    push    rbp
+    mov     rbp, rsp
+
+    mov     rcx, 16
+    call    packWord64
 
     leave
     ret
