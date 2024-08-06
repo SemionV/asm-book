@@ -1,0 +1,67 @@
+extern printf
+section .data
+    NL                  db  0xA,0
+    myStr               db  "test",0
+    testFloatFmt        db  "Float: %.3f",0xA,0
+    dummy               db  13
+align 16
+    number1             dd  0.5
+align 16
+    vector1 dd  0.34, 0.67, 0.0, 0.913
+    vector2 dd  0.34, 0.67, 0.0, 0.913
+section .bss
+section .text
+global  main
+main:
+    push    rbp
+    mov     rbp, rsp
+
+    mov     rdi, vector1
+    call    printVector4f
+
+    mov     rdi, NL
+    call    printString
+
+    mov     rdi, myStr
+    call    printString
+
+    movss   xmm0, dword [number1]
+    cvtss2sd    xmm0, xmm0
+    mov     rax, 1
+    lea     rdi, testFloatFmt
+    call    printf
+
+    leave
+    ret
+
+printVector4f:
+section .data
+    .message    db "%.3f, %.3f, %.3f, %.3f",0
+section .text
+    push    rbp
+    mov     rbp, rsp
+
+    movss       xmm0, [rdi]
+    cvtss2sd    xmm0, xmm0
+    movss       xmm1, [rdi + 4]
+    cvtss2sd    xmm1, xmm1
+    movss       xmm2, [rdi + 8]
+    cvtss2sd    xmm2, xmm2
+    movss       xmm3, [rdi + 12]
+    cvtss2sd    xmm3, xmm3
+    mov         rax, 4
+    mov         rdi, .message
+    call        printf
+
+    leave
+    ret
+
+printString:
+    push    rbp
+    mov     rbp, rsp
+
+    mov     rax, 0
+    call    printf
+
+    leave
+    ret
