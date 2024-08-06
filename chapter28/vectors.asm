@@ -1,14 +1,10 @@
 extern printf
 section .data
     NL                  db  0xA,0
-    myStr               db  "test",0
-    testFloatFmt        db  "Float: %.3f",0xA,0
     dummy               db  13
 align 16
-    number1             dd  0.5
-align 16
     vector1 dd  0.34, 0.67, 0.0, 0.913
-    vector2 dd  0.34, 0.67, 0.0, 0.913
+    vector2 dd  0.1, 0.2, 0.3, 0.4
 section .bss
 section .text
 global  main
@@ -22,14 +18,11 @@ main:
     mov     rdi, NL
     call    printString
 
-    mov     rdi, myStr
-    call    printString
+    mov     rdi, vector2
+    call    printVector4f
 
-    movss   xmm0, dword [number1]
-    cvtss2sd    xmm0, xmm0
-    mov     rax, 1
-    lea     rdi, testFloatFmt
-    call    printf
+    mov     rdi, NL
+    call    printString
 
     leave
     ret
